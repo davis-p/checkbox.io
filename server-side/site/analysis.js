@@ -27,11 +27,11 @@ function main()
         });
 
     });
-
+    process.exit(process_code);
 }
 
 
-
+var process_code = 0;
 var builders = {};
 
 // Represent a reusable "class" following the Builder pattern.
@@ -70,7 +70,7 @@ function FunctionBuilder()
         if(this.LineCount > 200 || this.syncCalls > 1  || this.bigOh || this.messageChain > 3)
         {
             console.log("Code doesnot follow the guidelines linecount or syncalls messagechain or complexity");
-            process.exit(1);
+            process_code = 1;
         }
     }
 

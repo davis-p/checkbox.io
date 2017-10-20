@@ -25,9 +25,9 @@ function main()
                 builders={};
             }
         });
+        process.exit(process_code);
 
     });
-    process.exit(process_code);
 }
 
 

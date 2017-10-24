@@ -160,7 +160,7 @@ function complexity(filePath)
                 }
                 if (firstnode.type === 'MemberExpression')
                 {
-                    var messagechain = 0;
+                    var messagechain = 1;
                     traverseWithParents(firstnode, function (children) {
                         if(children.type === 'MemberExpression')
                         {

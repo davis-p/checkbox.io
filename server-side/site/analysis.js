@@ -2,7 +2,7 @@ var esprima = require("esprima");
 var options = {tokens:true, tolerant: true, loc: true, range: true };
 var fs = require("fs");
 var glob = require("glob");
-
+var build = 0;
 function main()
 {
 
@@ -26,8 +26,11 @@ function main()
             }
         });
 
+      process.exit(build);
     });
+
 }
+
 
 
 var builders = {};
@@ -67,8 +70,8 @@ function FunctionBuilder()
         );
         if(this.LineCount > 200 || this.syncCalls > 1  || this.bigOh || this.messageChain > 3)
         {
-            console.log("Code doesnot follow the guidelines linecount or syncalls messagechain or complexity");
-            process.exit(1);
+            console.log("Code doesnot follow the guidelines linecount or syncalls messagechain or complexity\n");
+            build = 1;
         }
     }
 
@@ -142,6 +145,7 @@ function complexity(filePath)
             builders[builder.FunctionName] = builder;
 
             traverseWithParents(node.body, function (firstnode) {
+
                 if (firstnode.type !== undefined && (firstnode.type === 'ForStatement' || firstnode.type === 'ForInStatement' || firstnode.type === 'WhileStatement')) {
                     traverseWithParents(firstnode.body, function (secondnode) {
                         if (secondnode.type !== undefined && (secondnode.type === 'ForStatement' || secondnode.type === 'ForInStatement' || secondnode.type === 'WhileStatement')) {
@@ -152,6 +156,7 @@ function complexity(filePath)
                             });
                         }
                     });
+
                 }
                 if (firstnode.type === 'MemberExpression')
                 {
@@ -168,17 +173,10 @@ function complexity(filePath)
                     }
                 }
 
-                if (firstnode.type === 'CallExpression')
+                if(firstnode.name != undefined  && firstnode.name.indexOf('Sync')> -1)
                 {
-                    traverseWithParents(firstnode, function (children) {
-                        if(children.name != undefined && children.name.indexOf('Sync')> -1)
-                        {
-                            builder.syncCalls+=1;
-                        }
-                    });
-
+                    builder.syncCalls+=1;
                 }
-
             });
 
 

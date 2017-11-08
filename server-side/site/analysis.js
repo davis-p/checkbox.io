@@ -6,7 +6,6 @@ var build = 0;
 function main()
 {
 
-
     glob("**/*.js", options, function (er, files) {
 
         files.forEach(function (file) {
